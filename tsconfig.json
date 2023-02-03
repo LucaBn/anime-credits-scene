@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "removeComments": true,
+  },
+  "files": [
+    "index.ts",
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "zIndex": 9999,
+  "bgImage": null,
+  "bgSong": null,
+  "nameList": [
+    {
+      "title": "Authors",
+      "subtitle": null,
+      "nameList": ["Luca", "Matteo", "Giovanni", "Marco"]
+    },
+    {
+      "title": "Protagonist",
+      "subtitle": null,
+      "nameList": ["Gesù"]
+    },
+    {
+      "title": "Supporting characters",
+      "subtitle": "They weren't that important",
+      "nameList": ["Giuseppe", "Maria", "Asino", "Bue"]
+    },
+    {
+      "title": "Special thanks",
+      "subtitle": null,
+      "nameList": ["Giovanni Battista"]
+    },
+    {
+      "title": null,
+      "subtitle": null,
+      "nameList": ["Based on a true story"]
+    }
+  ]
+}
