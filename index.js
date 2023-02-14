@@ -1,41 +1,41 @@
-var animeCreditsScene = {
+const animeCreditsScene = {
     configData: {
         zIndex: 9999,
         bgImage: "assets/img/default.jpg",
         bgSong: "assets/audio/default.mp3",
-        nameList: []
+        nameList: [],
     },
-    getConfigJSON: function () {
-        var configJSON = fetch("assets/anime-credits-scene-data.json")
-            .then(function (response) { return response.json(); })
-            .then(function (configData) { return configData; })["catch"](function (error) { return console.log(error); });
+    getConfigJSON: () => {
+        const configJSON = fetch("assets/anime-credits-scene-data.json")
+            .then((response) => response.json())
+            .then((configData) => configData)
+            .catch((error) => console.log(error));
         return configJSON;
     },
-    setConfigData: function (_a) {
-        var configData = _a.configData;
+    setConfigData: ({ configData }) => {
         Object.entries(configData)
-            .filter(function (configDataProperty) { return configDataProperty[1]; })
-            .forEach(function (configDataProperty) {
+            .filter((configDataProperty) => configDataProperty[1])
+            .forEach((configDataProperty) => {
             animeCreditsScene.configData[configDataProperty[0]] =
                 configDataProperty[1];
         });
     },
-    handleAudioData: function () {
+    handleAudioData: () => {
         fetch(animeCreditsScene.configData.bgSong)
-            .then(function (audioObject) { return audioObject.arrayBuffer(); })
-            .then(function (audioObject) {
-            var audioContext = new window.AudioContext();
+            .then((audioObject) => audioObject.arrayBuffer())
+            .then((audioObject) => {
+            const audioContext = new window.AudioContext();
             audioContext.decodeAudioData(audioObject, function (buffer) {
                 console.log(buffer.duration);
             });
         });
     },
-    run: function () {
-        var runPipe = Promise.resolve();
+    run: () => {
+        const runPipe = Promise.resolve();
         runPipe
-            .then(function () { return animeCreditsScene.getConfigJSON(); })
-            .then(function (configData) { return animeCreditsScene.setConfigData({ configData: configData }); })
-            .then(function () { return animeCreditsScene.handleAudioData(); });
-    }
+            .then(() => animeCreditsScene.getConfigJSON())
+            .then((configData) => animeCreditsScene.setConfigData({ configData }))
+            .then(() => animeCreditsScene.handleAudioData());
+    },
 };
 animeCreditsScene.run();
