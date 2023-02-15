@@ -46,10 +46,4 @@ To generate the index.js file run
 npx tsc
 ```
 
-(Optional) You like unit tests? Just run
-
-```
-npm run test
-```
-
 Change the code to meet your needs.
