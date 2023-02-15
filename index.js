@@ -53,4 +53,7 @@ const animeCreditsScene = {
             .catch((error) => console.error(`Error: ${error}`));
     },
 };
-animeCreditsScene.run();
+const animeCreditsSceneTriggererList = document.querySelectorAll(".anime-credits-scene--run");
+animeCreditsSceneTriggererList.forEach((animeCreditsSceneTriggerer) => animeCreditsSceneTriggerer.addEventListener("click", () => {
+    animeCreditsScene.run();
+}));

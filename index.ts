@@ -98,5 +98,12 @@ const animeCreditsScene = {
   },
 };
 
-// Run it!
-animeCreditsScene.run();
+// Bind onClick event
+const animeCreditsSceneTriggererList = document.querySelectorAll(
+  ".anime-credits-scene--run"
+);
+animeCreditsSceneTriggererList.forEach((animeCreditsSceneTriggerer) =>
+  animeCreditsSceneTriggerer.addEventListener("click", () => {
+    animeCreditsScene.run();
+  })
+);
