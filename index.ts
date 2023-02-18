@@ -221,7 +221,11 @@ const animeCreditsScene = {
           animation-fill-mode: forwards;
         }
         #${libraryName}--name-list ul {
+          display: block;
+          max-width: 750px;
           list-style: none;
+          margin-left: auto;
+          margin-right: auto;
           margin-block-end: 65px;
           padding: 0;
         }
@@ -232,6 +236,7 @@ const animeCreditsScene = {
           font-size: clamp(1.7rem, 10vw, 2.55rem);
           line-height: 1;
           margin-block-end: 20px;
+          word-break: break-word;
         }
         .${libraryName}--name-list__subtitle {
           font-size: clamp(1.1rem, 6vw, 1.65rem);
@@ -239,11 +244,13 @@ const animeCreditsScene = {
           line-height: 1;
           margin-block-start: -5px;
           margin-block-end: 20px;
+          word-break: break-word;
         }
         .${libraryName}--name-list__name {
           font-size: clamp(1rem, 5vw, 1.5rem);
           line-height: 1;
           margin-block-end: 5px;
+          word-break: break-word;
         }
       </style>
     `
