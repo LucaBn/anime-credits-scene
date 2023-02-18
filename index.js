@@ -1,5 +1,6 @@
 const assetsPath = "assets";
 const libraryName = "anime-credits-scene";
+const fetchOptions = { cache: "force-cache" };
 const animeCreditsScene = {
     configData: {
         zIndex: 9999,
@@ -9,8 +10,9 @@ const animeCreditsScene = {
         bgSongBuffer: null,
         nameList: [],
     },
+    currentAnimationSetTimeoutId: null,
     getConfigJSON: () => {
-        const configJSON = fetch(`${assetsPath}/anime-credits-scene-data.json`)
+        const configJSON = fetch(`${assetsPath}/anime-credits-scene-data.json`, fetchOptions)
             .then((response) => response.json())
             .then((configData) => configData)
             .catch((error) => console.error(`Error with retrieving configuration file: ${error}`));
@@ -26,7 +28,7 @@ const animeCreditsScene = {
     },
     handleAudioData: () => {
         return new Promise((resolve) => {
-            fetch(animeCreditsScene.configData.bgSong)
+            fetch(animeCreditsScene.configData.bgSong, fetchOptions)
                 .then((audioObject) => audioObject.arrayBuffer())
                 .then((audioObject) => {
                 const audioContext = new window.AudioContext();
@@ -42,7 +44,7 @@ const animeCreditsScene = {
                 .catch((error) => console.error(`Error with handling audio file: ${error}`));
         });
     },
-    appendStyleTagToHead: () => {
+    appendOverlayElementStyleTagToHead: () => {
         document.head.insertAdjacentHTML("beforeend", `
       <style>
         #${libraryName}--container {
@@ -77,11 +79,11 @@ const animeCreditsScene = {
     `);
     },
     appendOverlayElementToBody: () => {
-        var overlayElement = document.createElement("div");
+        const overlayElement = document.createElement("div");
         overlayElement.id = `${libraryName}--container`;
         overlayElement.className = `${libraryName}--hidden`;
         overlayElement.innerHTML = `<span id="${libraryName}--close">✕</span>`;
-        animeCreditsScene.appendStyleTagToHead();
+        animeCreditsScene.appendOverlayElementStyleTagToHead();
         document.body.appendChild(overlayElement);
     },
     handleOverlayElement: () => {
@@ -95,6 +97,87 @@ const animeCreditsScene = {
             };
         });
     },
+    getNameListBlockHTML: (nameListBlock) => {
+        return `
+      <ul>
+        ${nameListBlock.title
+            ? `<li class="${libraryName}--name-list__title">${nameListBlock.title}</li>`
+            : ``}
+        ${nameListBlock.subtitle
+            ? `<li class="${libraryName}--name-list__subtitle">${nameListBlock.subtitle}</li>`
+            : ``}
+        ${nameListBlock.nameList.length &&
+            nameListBlock.nameList
+                .map((nameString) => nameString
+                ? `<li class="${libraryName}--name-list__name">${nameString}</li>`
+                : ``)
+                .join("")}
+      </ul>
+    `;
+    },
+    appendNameListElementToBody: () => {
+        const nameListElement = document.createElement("div");
+        nameListElement.id = `${libraryName}--name-list`;
+        animeCreditsScene.configData.nameList.forEach((nameListBlock) => {
+            nameListElement.innerHTML +=
+                animeCreditsScene.getNameListBlockHTML(nameListBlock);
+        });
+        const overlayElement = document.getElementById(`${libraryName}--container`);
+        overlayElement.appendChild(nameListElement);
+    },
+    appendNameListStyleTagToHead: () => {
+        document.head.insertAdjacentHTML("beforeend", `
+      <style>
+        @keyframes ${libraryName}--name-list-animation {
+          from { transform: translateY(100vh); }
+          to { transform: translateY(-100%); }
+        }
+
+        #${libraryName}--name-list {
+          position: absolute;
+          top: 0px;
+          left: 10%;
+          width: 80%;
+          font-family: monospace;
+          color: #fff;
+          text-align: center;
+          filter: drop-shadow(0 0 3px #000);
+          user-select: none;
+          animation: ${libraryName}--name-list-animation ${animeCreditsScene.configData.bgSongDuration - 0.5}s linear;
+          animation-fill-mode: forwards;
+        }
+        #${libraryName}--name-list ul {
+          list-style: none;
+          margin-block-end: 65px;
+          padding: 0;
+        }
+        #${libraryName}--name-list ul:last-child {
+          margin-block-end: 0;
+        }
+        .${libraryName}--name-list__title {
+          font-size: clamp(1.7rem, 10vw, 2.55rem);
+          line-height: 1;
+          margin-block-end: 20px;
+        }
+        .${libraryName}--name-list__subtitle {
+          font-size: clamp(1.1rem, 6vw, 1.65rem);
+          font-style: oblique;
+          line-height: 1;
+          margin-block-start: -5px;
+          margin-block-end: 20px;
+        }
+        .${libraryName}--name-list__name {
+          font-size: clamp(1rem, 5vw, 1.5rem);
+          line-height: 1;
+          margin-block-end: 5px;
+        }
+      </style>
+    `);
+    },
+    handleNameList: () => {
+        animeCreditsScene.appendNameListElementToBody();
+        animeCreditsScene.appendNameListStyleTagToHead();
+    },
     addCloseEvent: () => {
         document.addEventListener("click", (event) => {
             const eventTarget = event.target;
@@ -102,8 +185,21 @@ const animeCreditsScene = {
                 eventTarget.parentElement.classList.add(`${libraryName}--hidden`);
                 animeCreditsScene.configData.bgSongBuffer.stop();
                 Array.from(animeCreditsSceneTriggererList).forEach((animeCreditsSceneTriggerer) => animeCreditsSceneTriggerer.classList.remove(`${libraryName}--running`));
+                clearTimeout(animeCreditsScene.currentAnimationSetTimeoutId);
+                document.getElementById(`${libraryName}--name-list`).remove();
             }
         });
+    },
+    startScene: () => {
+        document
+            .getElementById(`${libraryName}--container`)
+            .classList.remove(`${libraryName}--hidden`);
+        animeCreditsScene.configData.bgSongBuffer.start();
+        const currentSetTimeout = setTimeout(() => {
+            document.getElementById(`${libraryName}--name-list`).remove();
+            document.getElementById(`${libraryName}--close`).click();
+        }, animeCreditsScene.configData.bgSongDuration * 1000);
+        animeCreditsScene.currentAnimationSetTimeoutId = currentSetTimeout;
     },
     run: () => {
         const runPipe = Promise.resolve();
@@ -112,13 +208,9 @@ const animeCreditsScene = {
             .then((configData) => animeCreditsScene.setConfigData({ configData }))
             .then(() => animeCreditsScene.handleAudioData())
             .then(() => animeCreditsScene.handleOverlayElement())
-            .then(() => {
-            document
-                .getElementById(`${libraryName}--container`)
-                .classList.remove(`${libraryName}--hidden`);
-            animeCreditsScene.configData.bgSongBuffer.start();
-        })
+            .then(() => animeCreditsScene.handleNameList())
             .then(() => animeCreditsScene.addCloseEvent())
+            .then(() => animeCreditsScene.startScene())
             .catch((error) => console.error(`Error: ${error}`));
     },
 };
