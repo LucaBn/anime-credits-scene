@@ -11,6 +11,7 @@ const animeCreditsScene = {
         nameList: [],
     },
     currentAnimationSetTimeoutId: null,
+    nameListStyleIsAppended: false,
     getConfigJSON: () => {
         const configJSON = fetch(`${assetsPath}/anime-credits-scene-data.json`, fetchOptions)
             .then((response) => response.json())
@@ -180,10 +181,12 @@ const animeCreditsScene = {
         }
       </style>
     `);
+        animeCreditsScene.nameListStyleIsAppended = true;
     },
     handleNameList: () => {
         animeCreditsScene.appendNameListElementToBody();
-        animeCreditsScene.appendNameListStyleTagToHead();
+        !animeCreditsScene.nameListStyleIsAppended &&
+            animeCreditsScene.appendNameListStyleTagToHead();
     },
     addCloseEvent: () => {
         document.addEventListener("click", (event) => {
@@ -193,7 +196,8 @@ const animeCreditsScene = {
                 animeCreditsScene.configData.bgSongBuffer.stop();
                 Array.from(animeCreditsSceneTriggererList).forEach((animeCreditsSceneTriggerer) => animeCreditsSceneTriggerer.classList.remove(`${libraryName}--running`));
                 clearTimeout(animeCreditsScene.currentAnimationSetTimeoutId);
-                document.getElementById(`${libraryName}--name-list`).remove();
+                const nameList = document.getElementById(`${libraryName}--name-list`);
+                nameList && nameList.remove();
             }
         });
     },

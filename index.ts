@@ -39,6 +39,7 @@ const animeCreditsScene = {
   },
 
   currentAnimationSetTimeoutId: null,
+  nameListStyleIsAppended: false,
 
   getConfigJSON: (): Promise<ConfigDataFromJsonType> => {
     const configJSON = fetch(
@@ -255,11 +256,14 @@ const animeCreditsScene = {
       </style>
     `
     );
+
+    animeCreditsScene.nameListStyleIsAppended = true;
   },
 
   handleNameList: (): void => {
     animeCreditsScene.appendNameListElementToBody();
-    animeCreditsScene.appendNameListStyleTagToHead();
+    !animeCreditsScene.nameListStyleIsAppended &&
+      animeCreditsScene.appendNameListStyleTagToHead();
   },
 
   addCloseEvent: (): void => {
@@ -279,7 +283,8 @@ const animeCreditsScene = {
 
         clearTimeout(animeCreditsScene.currentAnimationSetTimeoutId);
 
-        document.getElementById(`${libraryName}--name-list`).remove();
+        const nameList = document.getElementById(`${libraryName}--name-list`);
+        nameList && nameList.remove();
       }
     });
   },
