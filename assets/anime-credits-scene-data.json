@@ -2,6 +2,11 @@
   "zIndex": 9999,
   "bgImage": null,
   "bgSong": null,
+  "fontSizeTitle": null,
+  "fontSizeSubtitle": null,
+  "fontSizeNames": null,
+  "textColor": null,
+  "addRandomKanjiToNames": null,
   "nameList": [
     {
       "title": "Authors",
