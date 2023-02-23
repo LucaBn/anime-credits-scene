@@ -2,6 +2,8 @@
 const assetsPath: string = "assets";
 const libraryName: string = "anime-credits-scene";
 const fetchOptions: RequestInit = { cache: "force-cache" };
+const kanjiList =
+  "ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶ";
 
 // Types
 type NameListType = {
@@ -15,6 +17,11 @@ type ConfigDataFromJsonType = {
   bgImage: string;
   bgSong: string;
   nameList: NameListType[];
+  fontSizeTitle: string;
+  fontSizeSubtitle: string;
+  fontSizeNames: string;
+  textColor: string;
+  addRandomKanjiToNames: boolean;
 };
 
 type ConfigDataType = ConfigDataFromJsonType & {
@@ -36,9 +43,15 @@ const animeCreditsScene = {
     bgSongDuration: 0,
     bgSongBuffer: null,
     nameList: [],
+    fontSizeTitle: "clamp(1.7rem, 10vw, 2.55rem)",
+    fontSizeSubtitle: "clamp(1.1rem, 6vw, 1.65rem)",
+    fontSizeNames: "clamp(1rem, 5vw, 1.5rem)",
+    textColor: "#fff",
+    addRandomKanjiToNames: false,
   },
 
   currentAnimationSetTimeoutId: null,
+  nameListStyleIsAppended: false,
 
   getConfigJSON: (): Promise<ConfigDataFromJsonType> => {
     const configJSON = fetch(
@@ -58,6 +71,8 @@ const animeCreditsScene = {
     Object.entries(configData)
       .filter((configDataProperty) => configDataProperty[1])
       .forEach((configDataProperty) => {
+        console.log({ configDataProperty });
+
         animeCreditsScene.configData[configDataProperty[0]] =
           configDataProperty[1];
       });
@@ -155,6 +170,20 @@ const animeCreditsScene = {
     });
   },
 
+  getRandomKanji: (length: number): string => {
+    let kanjiString = "";
+    for (let index = 0; index < length; index++) {
+      kanjiString += kanjiList[Math.floor(Math.random() * kanjiList.length)];
+    }
+    return kanjiString;
+  },
+
+  handleNameString: (nameString: string): string => {
+    return animeCreditsScene.configData.addRandomKanjiToNames
+      ? `${nameString} ${animeCreditsScene.getRandomKanji(2)}`
+      : nameString;
+  },
+
   getNameListBlockHTML: (nameListBlock: NameListType): string => {
     return `
       <ul>
@@ -173,7 +202,9 @@ const animeCreditsScene = {
           nameListBlock.nameList
             .map((nameString) =>
               nameString
-                ? `<li class="${libraryName}--name-list__name">${nameString}</li>`
+                ? `<li class="${libraryName}--name-list__name">${animeCreditsScene.handleNameString(
+                    nameString
+                  )}</li>`
                 : ``
             )
             .join("")
@@ -211,7 +242,7 @@ const animeCreditsScene = {
           left: 10%;
           width: 80%;
           font-family: monospace;
-          color: #fff;
+          color: ${animeCreditsScene.configData.textColor};
           text-align: center;
           filter: drop-shadow(0 0 3px #000);
           user-select: none;
@@ -233,13 +264,13 @@ const animeCreditsScene = {
           margin-block-end: 0;
         }
         .${libraryName}--name-list__title {
-          font-size: clamp(1.7rem, 10vw, 2.55rem);
+          font-size: ${animeCreditsScene.configData.fontSizeTitle};
           line-height: 1;
           margin-block-end: 20px;
           word-break: break-word;
         }
         .${libraryName}--name-list__subtitle {
-          font-size: clamp(1.1rem, 6vw, 1.65rem);
+          font-size: ${animeCreditsScene.configData.fontSizeSubtitle};
           font-style: oblique;
           line-height: 1;
           margin-block-start: -5px;
@@ -247,7 +278,7 @@ const animeCreditsScene = {
           word-break: break-word;
         }
         .${libraryName}--name-list__name {
-          font-size: clamp(1rem, 5vw, 1.5rem);
+          font-size: ${animeCreditsScene.configData.fontSizeNames};
           line-height: 1;
           margin-block-end: 5px;
           word-break: break-word;
@@ -255,11 +286,14 @@ const animeCreditsScene = {
       </style>
     `
     );
+
+    animeCreditsScene.nameListStyleIsAppended = true;
   },
 
   handleNameList: (): void => {
     animeCreditsScene.appendNameListElementToBody();
-    animeCreditsScene.appendNameListStyleTagToHead();
+    !animeCreditsScene.nameListStyleIsAppended &&
+      animeCreditsScene.appendNameListStyleTagToHead();
   },
 
   addCloseEvent: (): void => {
@@ -279,7 +313,8 @@ const animeCreditsScene = {
 
         clearTimeout(animeCreditsScene.currentAnimationSetTimeoutId);
 
-        document.getElementById(`${libraryName}--name-list`).remove();
+        const nameList = document.getElementById(`${libraryName}--name-list`);
+        nameList && nameList.remove();
       }
     });
   },
