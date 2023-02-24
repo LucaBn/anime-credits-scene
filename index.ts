@@ -21,7 +21,7 @@ type ConfigDataFromJsonType = {
   fontSizeSubtitle: string;
   fontSizeNames: string;
   textColor: string;
-  addRandomKanjiToNames: boolean;
+  addRandomKanjisToNames: boolean;
 };
 
 type ConfigDataType = ConfigDataFromJsonType & {
@@ -47,7 +47,7 @@ const animeCreditsScene = {
     fontSizeSubtitle: "clamp(1.1rem, 6vw, 1.65rem)",
     fontSizeNames: "clamp(1rem, 5vw, 1.5rem)",
     textColor: "#fff",
-    addRandomKanjiToNames: false,
+    addRandomKanjisToNames: false,
   },
 
   currentAnimationSetTimeoutId: null,
@@ -71,8 +71,6 @@ const animeCreditsScene = {
     Object.entries(configData)
       .filter((configDataProperty) => configDataProperty[1])
       .forEach((configDataProperty) => {
-        console.log({ configDataProperty });
-
         animeCreditsScene.configData[configDataProperty[0]] =
           configDataProperty[1];
       });
@@ -179,7 +177,7 @@ const animeCreditsScene = {
   },
 
   handleNameString: (nameString: string): string => {
-    return animeCreditsScene.configData.addRandomKanjiToNames
+    return animeCreditsScene.configData.addRandomKanjisToNames
       ? `${nameString} ${animeCreditsScene.getRandomKanji(2)}`
       : nameString;
   },

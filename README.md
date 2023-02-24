@@ -24,7 +24,7 @@ Fill the `/assets/anime-credits-scene-data.json` file with your data.
 
 > Assign to **textColor** a string with css valid value for color property, otherwise you can leave it equal to null.
 
-> Assign to **addRandomKanjiToNames** a boolean value to determine if names in the name list need to be rendered with random [kanjis](https://en.wikipedia.org/wiki/Kanji) on the right, otherwise you can leave it equal to null (I know, it's nonsense, but I liked it the idea).
+> Assign to **addRandomKanjisToNames** a boolean value to determine if names in the name list need to be rendered with random [kanjis](https://en.wikipedia.org/wiki/Kanji) on the right, otherwise you can leave it equal to null (I know, it's nonsense, but I liked it the idea).
 
 > In the nameList array **Title** and **Subtitle** properties can be set equal to null to hide them
 
