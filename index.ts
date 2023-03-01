@@ -1,3 +1,6 @@
+// Config
+const configInJS: ConfigDataFromJsonType | {} = {};
+
 // Consts
 const assetsPath: string = "assets";
 const libraryName: string = "anime-credits-scene";
@@ -54,6 +57,12 @@ const animeCreditsScene = {
   nameListStyleIsAppended: false,
 
   getConfigJSON: (): Promise<ConfigDataFromJsonType> => {
+    if (Object.keys(configInJS).length > 0) {
+      return new Promise((resolve) => {
+        resolve(<ConfigDataFromJsonType>configInJS);
+      });
+    }
+
     const configJSON = fetch(
       `${assetsPath}/anime-credits-scene-data.json`,
       fetchOptions

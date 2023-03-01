@@ -59,3 +59,13 @@ npx tsc
 ```
 
 Change the code to meet your needs.
+
+---
+
+## Pro tip
+
+You can speed up the Anime Credit Scene experience by writing your data directly in the `index.js` file by filling the `configInJS` variable at line 1.
+
+Just assign copy-paste the JSON object and the script will prevent fetching config data from the `/assets/anime-credits-scene-data.json` file since it's already set in the JS file.
+
+You can also leave that field set as an empty object if you prefer to store your data in the `/assets/anime-credits-scene-data.json` file.

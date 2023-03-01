@@ -1,3 +1,4 @@
+const configInJS = {};
 const assetsPath = "assets";
 const libraryName = "anime-credits-scene";
 const fetchOptions = { cache: "force-cache" };
@@ -19,6 +20,11 @@ const animeCreditsScene = {
     currentAnimationSetTimeoutId: null,
     nameListStyleIsAppended: false,
     getConfigJSON: () => {
+        if (Object.keys(configInJS).length > 0) {
+            return new Promise((resolve) => {
+                resolve(configInJS);
+            });
+        }
         const configJSON = fetch(`${assetsPath}/anime-credits-scene-data.json`, fetchOptions)
             .then((response) => response.json())
             .then((configData) => configData)
