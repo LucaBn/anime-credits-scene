@@ -249,11 +249,15 @@ const animeCreditsScene = {
             .catch((error) => console.error(`Error: ${error}`));
     },
 };
-const animeCreditsSceneTriggererList = document.getElementsByClassName(`${libraryName}--run`);
-Array.from(animeCreditsSceneTriggererList).forEach((animeCreditsSceneTriggerer) => animeCreditsSceneTriggerer.addEventListener("click", (event) => {
-    const eventTarget = event.target;
-    if (!eventTarget.classList.contains(`${libraryName}--running`)) {
-        animeCreditsScene.run();
-        eventTarget.classList.add(`${libraryName}--running`);
-    }
-}));
+let animeCreditsSceneTriggererList;
+document.addEventListener("DOMContentLoaded", () => {
+    animeCreditsSceneTriggererList = document.getElementsByClassName(`${libraryName}--run`);
+    animeCreditsSceneTriggererList.length &&
+        Array.from(animeCreditsSceneTriggererList).forEach((animeCreditsSceneTriggerer) => animeCreditsSceneTriggerer.addEventListener("click", (event) => {
+            const eventTarget = event.target;
+            if (!eventTarget.classList.contains(`${libraryName}--running`)) {
+                animeCreditsScene.run();
+                eventTarget.classList.add(`${libraryName}--running`);
+            }
+        }));
+});
