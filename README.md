@@ -1,4 +1,12 @@
-# Anime Credits Scene
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/LucaBn/anime-credits-scene/blob/main/logo/anime-credits-scene--logo-dark.png?raw=true">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/LucaBn/anime-credits-scene/blob/main/logo/anime-credits-scene--logo-light.png?raw=true">
+    <img alt="Anime Credits Scene" src="https://github.com/LucaBn/anime-credits-scene/blob/main/logo/anime-credits-scene--logo-dark.png?raw=true" width="350" height="147" style="max-width: 100%;">
+  </picture>
+</p>
+
+# What's this?!
 
 Add an anime-style credits scene to your website.
 
@@ -69,3 +77,11 @@ You can speed up the Anime Credit Scene experience by writing your data directly
 Just assign copy-paste the JSON object and the script will prevent fetching config data from the `/assets/anime-credits-scene-data.json` file since it's already set in the JS file.
 
 You can also leave that field set as an empty object if you prefer to store your data in the `/assets/anime-credits-scene-data.json` file.
+
+---
+
+## CDN
+
+```
+https://cdn.jsdelivr.net/gh/lucabn/anime-credits-scene/index.js
+```
