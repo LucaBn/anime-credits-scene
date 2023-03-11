@@ -141,6 +141,7 @@ const animeCreditsScene = {
           line-height: 40px;
           cursor: pointer;
           filter: drop-shadow(0 0 3px #000);
+          z-index: 1;
         }
         .${libraryName}--hidden {
           opacity: 0;
