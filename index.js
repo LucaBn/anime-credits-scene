@@ -60,7 +60,7 @@ const animeCreditsScene = {
     appendOverlayElementStyleTagToHead: () => {
         document.head.insertAdjacentHTML("beforeend", `
       <style>
-        #${LIBRARY_NAME}--container {
+        #${LIBRARY_NAME}__container {
           position: fixed;
           top: 0;
           left: 0;
@@ -74,7 +74,7 @@ const animeCreditsScene = {
           z-index: ${animeCreditsScene.configData.zIndex};
           transition: opacity .35s ease-in-out;
         }
-        #${LIBRARY_NAME}--container span {
+        #${LIBRARY_NAME}__container span {
           position: absolute;
           top: 1rem;
           right: 1rem;
@@ -94,15 +94,15 @@ const animeCreditsScene = {
     },
     appendOverlayElementToBody: () => {
         const overlayElement = document.createElement("div");
-        overlayElement.id = `${LIBRARY_NAME}--container`;
+        overlayElement.id = `${LIBRARY_NAME}__container`;
         overlayElement.className = `${LIBRARY_NAME}--hidden`;
-        overlayElement.innerHTML = `<span id="${LIBRARY_NAME}--close">✕</span>`;
+        overlayElement.innerHTML = `<span id="${LIBRARY_NAME}__close-button">✕</span>`;
         animeCreditsScene.appendOverlayElementStyleTagToHead();
         document.body.appendChild(overlayElement);
     },
     handleOverlayElement: () => {
         return new Promise((resolve) => {
-            const overlayElement = document.getElementById(`${LIBRARY_NAME}--container`);
+            const overlayElement = document.getElementById(`${LIBRARY_NAME}__container`);
             overlayElement === null && animeCreditsScene.appendOverlayElementToBody();
             const bgImage = new Image();
             bgImage.src = animeCreditsScene.configData.bgImage;
@@ -127,15 +127,15 @@ const animeCreditsScene = {
         return `
       <ul>
         ${nameListBlock.title
-            ? `<li class="${LIBRARY_NAME}--name-list__title">${nameListBlock.title}</li>`
+            ? `<li class="${LIBRARY_NAME}__name-list-title">${nameListBlock.title}</li>`
             : ``}
         ${nameListBlock.subtitle
-            ? `<li class="${LIBRARY_NAME}--name-list__subtitle">${nameListBlock.subtitle}</li>`
+            ? `<li class="${LIBRARY_NAME}__name-list-subtitle">${nameListBlock.subtitle}</li>`
             : ``}
         ${nameListBlock.nameList.length &&
             nameListBlock.nameList
                 .map((nameString) => nameString
-                ? `<li class="${LIBRARY_NAME}--name-list__name">${animeCreditsScene.handleNameString(nameString)}</li>`
+                ? `<li class="${LIBRARY_NAME}__name-list-name">${animeCreditsScene.handleNameString(nameString)}</li>`
                 : ``)
                 .join("")}
       </ul>
@@ -143,23 +143,23 @@ const animeCreditsScene = {
     },
     appendNameListElementToBody: () => {
         const nameListElement = document.createElement("div");
-        nameListElement.id = `${LIBRARY_NAME}--name-list`;
+        nameListElement.id = `${LIBRARY_NAME}__name-list`;
         animeCreditsScene.configData.nameList.forEach((nameListBlock) => {
             nameListElement.innerHTML +=
                 animeCreditsScene.getNameListBlockHTML(nameListBlock);
         });
-        const overlayElement = document.getElementById(`${LIBRARY_NAME}--container`);
+        const overlayElement = document.getElementById(`${LIBRARY_NAME}__container`);
         overlayElement.appendChild(nameListElement);
     },
     appendNameListStyleTagToHead: () => {
         document.head.insertAdjacentHTML("beforeend", `
       <style>
-        @keyframes ${LIBRARY_NAME}--name-list-animation {
+        @keyframes ${LIBRARY_NAME}__name-list-animation {
           from { transform: translateY(100vh); }
           to { transform: translateY(-100%); }
         }
 
-        #${LIBRARY_NAME}--name-list {
+        #${LIBRARY_NAME}__name-list {
           position: absolute;
           top: 0px;
           left: 10%;
@@ -169,10 +169,10 @@ const animeCreditsScene = {
           text-align: center;
           filter: drop-shadow(0 0 3px #000);
           user-select: none;
-          animation: ${LIBRARY_NAME}--name-list-animation ${animeCreditsScene.configData.bgSongDuration - 0.5}s linear;
+          animation: ${LIBRARY_NAME}__name-list-animation ${animeCreditsScene.configData.bgSongDuration - 0.5}s linear;
           animation-fill-mode: forwards;
         }
-        #${LIBRARY_NAME}--name-list ul {
+        #${LIBRARY_NAME}__name-list ul {
           display: block;
           max-width: 750px;
           list-style: none;
@@ -181,16 +181,16 @@ const animeCreditsScene = {
           margin-block-end: 65px;
           padding: 0;
         }
-        #${LIBRARY_NAME}--name-list ul:last-child {
+        #${LIBRARY_NAME}__name-list ul:last-child {
           margin-block-end: 0;
         }
-        .${LIBRARY_NAME}--name-list__title {
+        .${LIBRARY_NAME}__name-list-title {
           font-size: ${animeCreditsScene.configData.fontSizeTitle};
           line-height: 1;
           margin-block-end: 20px;
           word-break: break-word;
         }
-        .${LIBRARY_NAME}--name-list__subtitle {
+        .${LIBRARY_NAME}__name-list-subtitle {
           font-size: ${animeCreditsScene.configData.fontSizeSubtitle};
           font-style: oblique;
           line-height: 1;
@@ -198,7 +198,7 @@ const animeCreditsScene = {
           margin-block-end: 20px;
           word-break: break-word;
         }
-        .${LIBRARY_NAME}--name-list__name {
+        .${LIBRARY_NAME}__name-list-name {
           font-size: ${animeCreditsScene.configData.fontSizeNames};
           line-height: 1;
           margin-block-end: 5px;
@@ -216,24 +216,24 @@ const animeCreditsScene = {
     addCloseEvent: () => {
         document.addEventListener("click", (event) => {
             const eventTarget = event.target;
-            if (eventTarget.id === `${LIBRARY_NAME}--close`) {
+            if (eventTarget.id === `${LIBRARY_NAME}__close-button`) {
                 eventTarget.parentElement.classList.add(`${LIBRARY_NAME}--hidden`);
                 animeCreditsScene.configData.bgSongBuffer.stop();
                 Array.from(animeCreditsSceneTriggererList).forEach((animeCreditsSceneTriggerer) => animeCreditsSceneTriggerer.classList.remove(`${LIBRARY_NAME}--running`));
                 clearTimeout(animeCreditsScene.currentAnimationSetTimeoutId);
-                const nameList = document.getElementById(`${LIBRARY_NAME}--name-list`);
+                const nameList = document.getElementById(`${LIBRARY_NAME}__name-list`);
                 nameList && nameList.remove();
             }
         });
     },
     startScene: () => {
         document
-            .getElementById(`${LIBRARY_NAME}--container`)
+            .getElementById(`${LIBRARY_NAME}__container`)
             .classList.remove(`${LIBRARY_NAME}--hidden`);
         animeCreditsScene.configData.bgSongBuffer.start();
         const currentSetTimeout = setTimeout(() => {
-            document.getElementById(`${LIBRARY_NAME}--name-list`).remove();
-            document.getElementById(`${LIBRARY_NAME}--close`).click();
+            document.getElementById(`${LIBRARY_NAME}__name-list`).remove();
+            document.getElementById(`${LIBRARY_NAME}__close-button`).click();
         }, animeCreditsScene.configData.bgSongDuration * 1000);
         animeCreditsScene.currentAnimationSetTimeoutId = currentSetTimeout;
     },
