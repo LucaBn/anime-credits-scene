@@ -112,10 +112,7 @@ const animeCreditsScene = {
         });
     },
     getRandomKanji: (length) => {
-        let kanjiString = "";
-        for (let index = 0; index < length; index++) {
-            kanjiString += KANJI_LIST[Math.floor(Math.random() * KANJI_LIST.length)];
-        }
+        const kanjiString = Array.from({ length }, () => KANJI_LIST[Math.floor(Math.random() * KANJI_LIST.length)]).join("");
         return kanjiString;
     },
     handleNameString: (nameString) => {

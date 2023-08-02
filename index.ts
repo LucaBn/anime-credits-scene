@@ -179,10 +179,10 @@ const animeCreditsScene = {
   },
 
   getRandomKanji: (length: number): string => {
-    let kanjiString = "";
-    for (let index = 0; index < length; index++) {
-      kanjiString += KANJI_LIST[Math.floor(Math.random() * KANJI_LIST.length)];
-    }
+    const kanjiString = Array.from(
+      { length },
+      () => KANJI_LIST[Math.floor(Math.random() * KANJI_LIST.length)]
+    ).join("");
     return kanjiString;
   },
 
@@ -358,7 +358,7 @@ const animeCreditsScene = {
 };
 
 // Bind onClick event
-let animeCreditsSceneTriggererList;
+let animeCreditsSceneTriggererList: HTMLCollection;
 document.addEventListener("DOMContentLoaded", () => {
   animeCreditsSceneTriggererList = document.getElementsByClassName(
     `${LIBRARY_NAME}--run`
