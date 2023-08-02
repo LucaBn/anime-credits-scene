@@ -2,10 +2,10 @@
 const configInJS: ConfigDataFromJsonType | {} = {};
 
 // Consts
-const assetsPath: string = "assets";
-const libraryName: string = "anime-credits-scene";
-const fetchOptions: RequestInit = { cache: "force-cache" };
-const kanjiList =
+const ASSETS_PATH: string = "assets";
+const LIBRARY_NAME: string = "anime-credits-scene";
+const FETCH_OPTIONS: RequestInit = { cache: "force-cache" };
+const KANJI_LIST =
   "ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶ";
 
 // Types
@@ -41,8 +41,8 @@ interface ISetConfigData {
 const animeCreditsScene = {
   configData: <ConfigDataType>{
     zIndex: 9999,
-    bgImage: `${assetsPath}/img/default.jpg`,
-    bgSong: `${assetsPath}/audio/default.mp3`,
+    bgImage: `${ASSETS_PATH}/img/default.jpg`,
+    bgSong: `${ASSETS_PATH}/audio/default.mp3`,
     bgSongDuration: 0,
     bgSongBuffer: null,
     nameList: [],
@@ -64,8 +64,8 @@ const animeCreditsScene = {
     }
 
     const configJSON = fetch(
-      `${assetsPath}/anime-credits-scene-data.json`,
-      fetchOptions
+      `${ASSETS_PATH}/anime-credits-scene-data.json`,
+      FETCH_OPTIONS
     )
       .then((response) => response.json())
       .then((configData) => configData)
@@ -87,7 +87,7 @@ const animeCreditsScene = {
 
   handleAudioData: (): Promise<void> => {
     return new Promise((resolve) => {
-      fetch(animeCreditsScene.configData.bgSong, fetchOptions)
+      fetch(animeCreditsScene.configData.bgSong, FETCH_OPTIONS)
         .then((audioObject) => audioObject.arrayBuffer())
         .then((audioObject) => {
           const audioContext = new window.AudioContext();
@@ -118,7 +118,7 @@ const animeCreditsScene = {
       "beforeend",
       `
       <style>
-        #${libraryName}--container {
+        #${LIBRARY_NAME}--container {
           position: fixed;
           top: 0;
           left: 0;
@@ -132,7 +132,7 @@ const animeCreditsScene = {
           z-index: ${animeCreditsScene.configData.zIndex};
           transition: opacity .35s ease-in-out;
         }
-        #${libraryName}--container span {
+        #${LIBRARY_NAME}--container span {
           position: absolute;
           top: 1rem;
           right: 1rem;
@@ -143,7 +143,7 @@ const animeCreditsScene = {
           filter: drop-shadow(0 0 3px #000);
           z-index: 1;
         }
-        .${libraryName}--hidden {
+        .${LIBRARY_NAME}--hidden {
           opacity: 0;
           pointer-events: none;
         }
@@ -154,9 +154,9 @@ const animeCreditsScene = {
 
   appendOverlayElementToBody: (): void => {
     const overlayElement = document.createElement("div");
-    overlayElement.id = `${libraryName}--container`;
-    overlayElement.className = `${libraryName}--hidden`;
-    overlayElement.innerHTML = `<span id="${libraryName}--close">✕</span>`;
+    overlayElement.id = `${LIBRARY_NAME}--container`;
+    overlayElement.className = `${LIBRARY_NAME}--hidden`;
+    overlayElement.innerHTML = `<span id="${LIBRARY_NAME}--close">✕</span>`;
 
     animeCreditsScene.appendOverlayElementStyleTagToHead();
 
@@ -166,7 +166,7 @@ const animeCreditsScene = {
   handleOverlayElement: (): Promise<void> => {
     return new Promise((resolve) => {
       const overlayElement = document.getElementById(
-        `${libraryName}--container`
+        `${LIBRARY_NAME}--container`
       );
       overlayElement === null && animeCreditsScene.appendOverlayElementToBody();
 
@@ -181,7 +181,7 @@ const animeCreditsScene = {
   getRandomKanji: (length: number): string => {
     let kanjiString = "";
     for (let index = 0; index < length; index++) {
-      kanjiString += kanjiList[Math.floor(Math.random() * kanjiList.length)];
+      kanjiString += KANJI_LIST[Math.floor(Math.random() * KANJI_LIST.length)];
     }
     return kanjiString;
   },
@@ -197,12 +197,12 @@ const animeCreditsScene = {
       <ul>
         ${
           nameListBlock.title
-            ? `<li class="${libraryName}--name-list__title">${nameListBlock.title}</li>`
+            ? `<li class="${LIBRARY_NAME}--name-list__title">${nameListBlock.title}</li>`
             : ``
         }
         ${
           nameListBlock.subtitle
-            ? `<li class="${libraryName}--name-list__subtitle">${nameListBlock.subtitle}</li>`
+            ? `<li class="${LIBRARY_NAME}--name-list__subtitle">${nameListBlock.subtitle}</li>`
             : ``
         }
         ${
@@ -210,7 +210,7 @@ const animeCreditsScene = {
           nameListBlock.nameList
             .map((nameString) =>
               nameString
-                ? `<li class="${libraryName}--name-list__name">${animeCreditsScene.handleNameString(
+                ? `<li class="${LIBRARY_NAME}--name-list__name">${animeCreditsScene.handleNameString(
                     nameString
                   )}</li>`
                 : ``
@@ -223,14 +223,16 @@ const animeCreditsScene = {
 
   appendNameListElementToBody: (): void => {
     const nameListElement = document.createElement("div");
-    nameListElement.id = `${libraryName}--name-list`;
+    nameListElement.id = `${LIBRARY_NAME}--name-list`;
 
     animeCreditsScene.configData.nameList.forEach((nameListBlock) => {
       nameListElement.innerHTML +=
         animeCreditsScene.getNameListBlockHTML(nameListBlock);
     });
 
-    const overlayElement = document.getElementById(`${libraryName}--container`);
+    const overlayElement = document.getElementById(
+      `${LIBRARY_NAME}--container`
+    );
     overlayElement.appendChild(nameListElement);
   },
 
@@ -239,12 +241,12 @@ const animeCreditsScene = {
       "beforeend",
       `
       <style>
-        @keyframes ${libraryName}--name-list-animation {
+        @keyframes ${LIBRARY_NAME}--name-list-animation {
           from { transform: translateY(100vh); }
           to { transform: translateY(-100%); }
         }
 
-        #${libraryName}--name-list {
+        #${LIBRARY_NAME}--name-list {
           position: absolute;
           top: 0px;
           left: 10%;
@@ -254,12 +256,12 @@ const animeCreditsScene = {
           text-align: center;
           filter: drop-shadow(0 0 3px #000);
           user-select: none;
-          animation: ${libraryName}--name-list-animation ${
+          animation: ${LIBRARY_NAME}--name-list-animation ${
         animeCreditsScene.configData.bgSongDuration - 0.5
       }s linear;
           animation-fill-mode: forwards;
         }
-        #${libraryName}--name-list ul {
+        #${LIBRARY_NAME}--name-list ul {
           display: block;
           max-width: 750px;
           list-style: none;
@@ -268,16 +270,16 @@ const animeCreditsScene = {
           margin-block-end: 65px;
           padding: 0;
         }
-        #${libraryName}--name-list ul:last-child {
+        #${LIBRARY_NAME}--name-list ul:last-child {
           margin-block-end: 0;
         }
-        .${libraryName}--name-list__title {
+        .${LIBRARY_NAME}--name-list__title {
           font-size: ${animeCreditsScene.configData.fontSizeTitle};
           line-height: 1;
           margin-block-end: 20px;
           word-break: break-word;
         }
-        .${libraryName}--name-list__subtitle {
+        .${LIBRARY_NAME}--name-list__subtitle {
           font-size: ${animeCreditsScene.configData.fontSizeSubtitle};
           font-style: oblique;
           line-height: 1;
@@ -285,7 +287,7 @@ const animeCreditsScene = {
           margin-block-end: 20px;
           word-break: break-word;
         }
-        .${libraryName}--name-list__name {
+        .${LIBRARY_NAME}--name-list__name {
           font-size: ${animeCreditsScene.configData.fontSizeNames};
           line-height: 1;
           margin-block-end: 5px;
@@ -308,20 +310,20 @@ const animeCreditsScene = {
     document.addEventListener("click", (event) => {
       const eventTarget = event.target as HTMLElement;
 
-      if (eventTarget.id === `${libraryName}--close`) {
-        eventTarget.parentElement.classList.add(`${libraryName}--hidden`);
+      if (eventTarget.id === `${LIBRARY_NAME}--close`) {
+        eventTarget.parentElement.classList.add(`${LIBRARY_NAME}--hidden`);
         animeCreditsScene.configData.bgSongBuffer.stop();
 
         Array.from(animeCreditsSceneTriggererList).forEach(
           (animeCreditsSceneTriggerer: HTMLElement) =>
             animeCreditsSceneTriggerer.classList.remove(
-              `${libraryName}--running`
+              `${LIBRARY_NAME}--running`
             )
         );
 
         clearTimeout(animeCreditsScene.currentAnimationSetTimeoutId);
 
-        const nameList = document.getElementById(`${libraryName}--name-list`);
+        const nameList = document.getElementById(`${LIBRARY_NAME}--name-list`);
         nameList && nameList.remove();
       }
     });
@@ -329,13 +331,13 @@ const animeCreditsScene = {
 
   startScene: (): void => {
     document
-      .getElementById(`${libraryName}--container`)
-      .classList.remove(`${libraryName}--hidden`);
+      .getElementById(`${LIBRARY_NAME}--container`)
+      .classList.remove(`${LIBRARY_NAME}--hidden`);
     animeCreditsScene.configData.bgSongBuffer.start();
 
     const currentSetTimeout = setTimeout(() => {
-      document.getElementById(`${libraryName}--name-list`).remove();
-      document.getElementById(`${libraryName}--close`).click();
+      document.getElementById(`${LIBRARY_NAME}--name-list`).remove();
+      document.getElementById(`${LIBRARY_NAME}--close`).click();
     }, animeCreditsScene.configData.bgSongDuration * 1000);
     animeCreditsScene.currentAnimationSetTimeoutId = currentSetTimeout;
   },
@@ -359,16 +361,16 @@ const animeCreditsScene = {
 let animeCreditsSceneTriggererList;
 document.addEventListener("DOMContentLoaded", () => {
   animeCreditsSceneTriggererList = document.getElementsByClassName(
-    `${libraryName}--run`
+    `${LIBRARY_NAME}--run`
   );
   animeCreditsSceneTriggererList.length &&
     Array.from(animeCreditsSceneTriggererList).forEach(
       (animeCreditsSceneTriggerer: HTMLElement) =>
         animeCreditsSceneTriggerer.addEventListener("click", (event) => {
           const eventTarget = event.target as HTMLElement;
-          if (!eventTarget.classList.contains(`${libraryName}--running`)) {
+          if (!eventTarget.classList.contains(`${LIBRARY_NAME}--running`)) {
             animeCreditsScene.run();
-            eventTarget.classList.add(`${libraryName}--running`);
+            eventTarget.classList.add(`${LIBRARY_NAME}--running`);
           }
         })
     );
