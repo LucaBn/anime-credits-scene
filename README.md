@@ -36,7 +36,18 @@ Fill the `/assets/anime-credits-scene-data.json` file with your data.
 
 > In the nameList array **Title** and **Subtitle** properties can be set equal to null to hide them
 
-Now take the `index.js` file and the `/assets` folder and use them wherever you need them (remember to delete unused resources in `/assets` folder to save disc space).
+Take the `index.js` file and the `/assets` folder and use them wherever you need them (remember to delete unused resources in `/assets` folder to save disc space).
+
+Include the library in your page(s) and add class `${LIBRARY_NAME}--run` to the html elements that need to trigger the anime-credit-scene effect.
+`${LIBRARY_NAME}` is equal to `"anime-credits-scene"` by default.
+
+Example:
+```html
+<button class="anime-credit-scene--run">
+  This button starts the Anime Credit Scene effect!
+</button>
+```
+
 
 ---
 
