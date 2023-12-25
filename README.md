@@ -12,8 +12,6 @@ Add an anime-style credits scene to your website.
 
 Set a background picture, a song and the names to display in the credits list; then enjoy the experience.
 
----
-
 ## How to use
 
 Download the project.
@@ -36,19 +34,24 @@ Fill the `/assets/anime-credits-scene-data.json` file with your data.
 
 > In the nameList array **Title** and **Subtitle** properties can be set equal to null to hide them
 
-Now take the `index.js` file and the `/assets` folder and use them wherever you need them (remember to delete unused resources in `/assets` folder to save disc space).
+Take the `index.js` file and the `/assets` folder and use them wherever you need them (remember to delete unused resources in `/assets` folder to save disc space).
 
----
+Include the library in your page(s) and add class `${LIBRARY_NAME}--run` to the html elements that need to trigger the anime-credit-scene effect.
+`${LIBRARY_NAME}` is equal to `"anime-credits-scene"` by default.
 
-## Requirements for local installation
+Example:
+```html
+<button class="anime-credit-scene--run">
+  This button starts the Anime Credit Scene effect!
+</button>
+```
 
+## Local installation
+
+Requirements:
 - Node.js >= 16.14.0
 - npm >= 8.3.1
 - IQ > 50
-
----
-
-## Local installation
 
 Clone the project.
 
@@ -68,8 +71,6 @@ npx tsc
 
 Change the code to meet your needs.
 
----
-
 ## Pro tip
 
 You can speed up the Anime Credit Scene experience by writing your data directly in the `index.js` file by filling the `configInJS` variable at line 1.
@@ -77,8 +78,6 @@ You can speed up the Anime Credit Scene experience by writing your data directly
 Just copy-paste the JSON object and the script will prevent fetching config data from the `/assets/anime-credits-scene-data.json` file since it's already set in the JS file.
 
 You can also leave that field set as an empty object if you prefer to store your data in the `/assets/anime-credits-scene-data.json` file.
-
----
 
 ## CDN
 
