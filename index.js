@@ -253,12 +253,7 @@ const animeCreditsScene = {
       if (eventTarget.id === `${LIBRARY_NAME}__close-button`) {
         eventTarget.parentElement.classList.add(`${LIBRARY_NAME}--hidden`);
         animeCreditsScene.configData.bgSongBuffer.stop();
-        Array.from(animeCreditsSceneTriggererList).forEach(
-          (animeCreditsSceneTriggerer) =>
-            animeCreditsSceneTriggerer.classList.remove(
-              `${LIBRARY_NAME}--running`
-            )
-        );
+        animeCreditsSceneTriggerer.classList.remove(`${LIBRARY_NAME}--running`);
         clearTimeout(animeCreditsScene.currentAnimationSetTimeoutId);
         const nameList = document.getElementById(`${LIBRARY_NAME}__name-list`);
         nameList && nameList.remove();
@@ -290,18 +285,22 @@ const animeCreditsScene = {
   },
 };
 
+let animeCreditsSceneTriggerer = null;
+
 document.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("click", (event) => {
-    const animeCreditsSceneTriggererList = event.target.closest(
-      `.${LIBRARY_NAME}--run`
-    );
+    const eventTriggerer = event.target.closest(`.${LIBRARY_NAME}--run`);
 
-    if (animeCreditsSceneTriggererList) {
-      const eventTarget = event.target;
+    if (eventTriggerer) {
+      animeCreditsSceneTriggerer = eventTriggerer;
 
-      if (!eventTarget.classList.contains(`${LIBRARY_NAME}--running`)) {
+      if (
+        !animeCreditsSceneTriggerer.classList.contains(
+          `${LIBRARY_NAME}--running`
+        )
+      ) {
         animeCreditsScene.run();
-        eventTarget.classList.add(`${LIBRARY_NAME}--running`);
+        animeCreditsSceneTriggerer.classList.add(`${LIBRARY_NAME}--running`);
       }
     }
   });

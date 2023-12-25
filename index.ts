@@ -314,12 +314,7 @@ const animeCreditsScene = {
         eventTarget.parentElement.classList.add(`${LIBRARY_NAME}--hidden`);
         animeCreditsScene.configData.bgSongBuffer.stop();
 
-        Array.from(animeCreditsSceneTriggererList).forEach(
-          (animeCreditsSceneTriggerer: HTMLElement) =>
-            animeCreditsSceneTriggerer.classList.remove(
-              `${LIBRARY_NAME}--running`
-            )
-        );
+        animeCreditsSceneTriggerer.classList.remove(`${LIBRARY_NAME}--running`);
 
         clearTimeout(animeCreditsScene.currentAnimationSetTimeoutId);
 
@@ -358,20 +353,24 @@ const animeCreditsScene = {
 };
 
 // Bind onClick event
-let animeCreditsSceneTriggererList: HTMLCollection;
+let animeCreditsSceneTriggerer: HTMLElement | null = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("click", (event: Event) => {
-    const animeCreditsSceneTriggererList = (
-      event.target as HTMLElement
-    ).closest(`.${LIBRARY_NAME}--run`);
+    const eventTriggerer = (event.target as HTMLElement).closest(
+      `.${LIBRARY_NAME}--run`
+    ) as HTMLElement;
 
-    if (animeCreditsSceneTriggererList) {
-      const eventTarget = event.target as HTMLElement;
+    if (eventTriggerer) {
+      animeCreditsSceneTriggerer = eventTriggerer;
 
-      if (!eventTarget.classList.contains(`${LIBRARY_NAME}--running`)) {
+      if (
+        !animeCreditsSceneTriggerer.classList.contains(
+          `${LIBRARY_NAME}--running`
+        )
+      ) {
         animeCreditsScene.run();
-        eventTarget.classList.add(`${LIBRARY_NAME}--running`);
+        animeCreditsSceneTriggerer.classList.add(`${LIBRARY_NAME}--running`);
       }
     }
   });
