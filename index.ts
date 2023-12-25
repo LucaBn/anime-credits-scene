@@ -359,19 +359,20 @@ const animeCreditsScene = {
 
 // Bind onClick event
 let animeCreditsSceneTriggererList: HTMLCollection;
+
 document.addEventListener("DOMContentLoaded", () => {
-  animeCreditsSceneTriggererList = document.getElementsByClassName(
-    `${LIBRARY_NAME}--run`
-  );
-  animeCreditsSceneTriggererList.length &&
-    Array.from(animeCreditsSceneTriggererList).forEach(
-      (animeCreditsSceneTriggerer: HTMLElement) =>
-        animeCreditsSceneTriggerer.addEventListener("click", (event) => {
-          const eventTarget = event.target as HTMLElement;
-          if (!eventTarget.classList.contains(`${LIBRARY_NAME}--running`)) {
-            animeCreditsScene.run();
-            eventTarget.classList.add(`${LIBRARY_NAME}--running`);
-          }
-        })
-    );
+  document.body.addEventListener("click", (event: Event) => {
+    const animeCreditsSceneTriggererList = (
+      event.target as HTMLElement
+    ).closest(`.${LIBRARY_NAME}--run`);
+
+    if (animeCreditsSceneTriggererList) {
+      const eventTarget = event.target as HTMLElement;
+
+      if (!eventTarget.classList.contains(`${LIBRARY_NAME}--running`)) {
+        animeCreditsScene.run();
+        eventTarget.classList.add(`${LIBRARY_NAME}--running`);
+      }
+    }
+  });
 });
